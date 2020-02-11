@@ -11,7 +11,7 @@ class ProductsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final prod = Provider.of<Products>(context, listen: false);
-    final _prodData = _isFavs ? prod.showFavorie : prod.items;
+    final _prodData = _isFavs ? prod.showFavorite : prod.items;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
