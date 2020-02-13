@@ -36,7 +36,9 @@ class Products with ChangeNotifier {
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
-      if(extractedData == null){return;}
+      if (extractedData == null) {
+        return;
+      }
       final List<Product> loadedData = [];
 
       extractedData.forEach(
@@ -64,14 +66,18 @@ class Products with ChangeNotifier {
   Future<void> addProduct(Product product) async {
     const url = '$api/products.json';
     try {
-      final response = await http.post(url,
-          body: json.encode({
+      final response = await http.post(
+        url,
+        body: json.encode(
+          {
             'title': product.title,
             'price': product.price,
             'description': product.description,
             'imageUrl': product.imageUrl,
             'isFavorite': product.isFavorite,
-          }));
+          },
+        ),
+      );
 
       final _newProduct = Product(
         id: json.decode(response.body)['name'],
