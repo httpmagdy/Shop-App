@@ -58,7 +58,7 @@ class Products with ChangeNotifier {
       _items = loadedData;
       notifyListeners();
     } catch (error) {
-//      print('Product {GIT} ERROR: >> $error');
+
       throw (error);
     }
   }
@@ -90,7 +90,7 @@ class Products with ChangeNotifier {
       _items.add(_newProduct);
       notifyListeners();
     } catch (error) {
-//      print('Product {POST} ERROR: >> $error');
+
       throw (error);
     }
   }
