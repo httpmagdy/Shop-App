@@ -6,9 +6,12 @@ import '../widgets/cart_itemable.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = 'cart-screen';
+
+
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Cart'),
@@ -29,19 +32,9 @@ class CartScreen extends StatelessWidget {
                   Spacer(),
                   Chip(
                     label: Text('\$${cart.totalAmount.toStringAsFixed(2)}'),
-                    backgroundColor: Theme.of(context).accentColor,
+                    backgroundColor: Colors.grey.shade300,
                   ),
-                  FlatButton(
-                    child: Text('ORDER NOW'),
-                    textColor: Theme.of(context).primaryColor,
-                    onPressed: () {
-                      Provider.of<Orders>(context, listen: false).addOrder(
-                        cart.items.values.toList(),
-                        cart.totalAmount,
-                      );
-                      cart.clear();
-                    },
-                  ),
+                  OrderNowButton(cart),
                 ],
               ),
             ),
@@ -61,5 +54,44 @@ class CartScreen extends StatelessWidget {
         ],
       ),
     );
+  }}
+
+
+class OrderNowButton extends StatefulWidget {
+  final Cart cart;
+  const OrderNowButton(this.cart);
+
+  @override
+  _OrderNowButtonState createState() => _OrderNowButtonState();
+}
+
+class _OrderNowButtonState extends State<OrderNowButton> {
+  var isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      child: isLoading ? CircularProgressIndicator() : Text('ORDER NOW'),
+      textColor: Theme.of(context).primaryColor,
+      onPressed: (widget.cart.totalAmount <= 0) ? null : () async{
+
+        setState(() {
+          isLoading = true;
+        });
+
+        await Provider.of<Orders>(context, listen: false).addOrder(
+          widget.cart.items.values.toList(),
+          widget.cart.totalAmount,
+        ).then((_){
+          setState(() {
+            isLoading = false;
+          });
+        });
+
+
+        widget.cart.clear();
+      },
+    );
   }
 }
+

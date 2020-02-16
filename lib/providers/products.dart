@@ -119,8 +119,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> deleteProduct(String id) async{
-
-    final url = '$api/products/$id.jsgfgon';
+    final url = '$api/products/$id.json';
 
     final _existingProductIndex = _items.indexWhere((pro)=> pro.id == id);
     var _existingProduct = _items[_existingProductIndex];
