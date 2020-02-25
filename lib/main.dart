@@ -9,14 +9,19 @@ import './screens/cart_screen.dart';
 import './screens/product_details_screen.dart';
 import './screens/products_oerview_screen.dart';
 import './screens/user_product_screen.dart';
+import './screens/auth_screen.dart';
+import './providers/auth.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  @override 
+  @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider.value(
+          value: Auth(),
+        ),
         ChangeNotifierProvider.value(
           value: Products(),
         ),
@@ -27,22 +32,23 @@ class MyApp extends StatelessWidget {
           value: Orders(),
         ),
       ],
-          child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.teal,
-          accentColor: Colors.red,
-          fontFamily: 'Lato',
+      child: Consumer<Auth>(
+        builder: (ctx, auth, _)=> MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.teal,
+            accentColor: Colors.red,
+            fontFamily: 'Lato',
+          ),
+          home: auth.isAuth ? ProductsOverviewScreen() : AuthScreen(),
+          routes: {
+            ProductDetailsScreen.routeName: (ctx) => ProductDetailsScreen(),
+            CartScreen.routeName: (ctx) => CartScreen(),
+            OrdersScreen.routeName: (ctx) => OrdersScreen(),
+            UserProductScreen.routeName: (ctx) => UserProductScreen(),
+            EditProductsScreen.routeName: (ctx) => EditProductsScreen(),
+          },
         ),
-        home: ProductsOverviewScreen(),
-        routes: {
-          ProductDetailsScreen.routeName: (ctx)=> ProductDetailsScreen(),
-          CartScreen.routeName: (ctx)=> CartScreen(),
-          OrdersScreen.routeName: (ctx)=> OrdersScreen(),
-          UserProductScreen.routeName: (ctx)=> UserProductScreen(),
-          EditProductsScreen.routeName: (ctx)=> EditProductsScreen(),
-        },
-        
       ),
     );
   }
